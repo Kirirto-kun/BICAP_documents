@@ -2,8 +2,6 @@ from fastapi import FastAPI, Request, UploadFile, Form
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import RedirectResponse
-
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -63,20 +61,10 @@ def send_email(receiver_email, subject, body, attachment_path=None):
     except Exception as e:
         print(f"Failed to send email: {e}")
 
-
-@app.post("/login")
-async def login(email: str = Form(...), password: str = Form(...)):
-    # Вы можете добавить лог здесь, если нужно
-    return RedirectResponse(url="/upload", status_code=302)
-
-
 # Маршрут для загрузки файла
 @app.get("/", response_class=HTMLResponse)
 async def upload_form(request: Request):
-    return templates.TemplateResponse("login.html", {"request": request})
-@app.get("/login")
-async def show_login_page(request: Request):
-    return templates.TemplateResponse("login.html", {"request": request})
+    return templates.TemplateResponse("upload.html", {"request": request})
 
 @app.post("/upload")
 async def upload_file(request: Request, file: UploadFile, email: str = Form(...)):
